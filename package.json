@@ -1,0 +1,16 @@
+{
+	"name": "ruby-sass-loader",
+	"description": "Compile sass/scss files with webpack using the original ruby sass implementation",
+	"keywords": ["sass", "scss", "ruby", "webpack", "loader"],
+	"version": "0.2.0",
+	"author": "Dominik del Bondio",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ddelbondio/ruby-sass-loader.git"
+	},
+	"dependencies": {
+		"loader-utils": "~0.2.3",
+		"async": "~0.9.0"
+	}
+}
