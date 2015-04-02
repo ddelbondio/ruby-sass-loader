@@ -22,8 +22,11 @@ Controls the --require argument.
 #### buildPath
 Specify a custom build path. If not given the sass and cache files will be compiled in a temporary directory (os.tmpdir() + '/ruby-sass-loader')
 
+#### outputFile
+Specify a custom output filename. If not specified the sass and cache files will be compiled into 'out.css' and 'out.css.map'
 
-### Example
+
+### Simple example
 
 ``` javascript
 module.exports = {
@@ -32,6 +35,35 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: 'style!css?sourceMap!ruby-sass'
+      }
+    ]
+  }
+};
+```
+
+### Advanced example
+
+``` javascript
+module.exports = {
+
+  entry: [
+       /* smth */
+       './styles/main.scss'
+  ],
+
+  module: {
+    loaders: [
+      /* some other loaders */
+      {
+        test: /\.scss$/,
+        loader: 'style!css!ruby-sass?outputStyle=expanded' +
+                '&includePaths[]=' +
+                    path.resolve(__dirname, './node_modules/zurb-foundation/scss') +
+                '&includePaths[]=' +
+                    path.resolve(__dirname, './styles/') +
+                '&buildPath=' +
+                    path.resolve(__dirname, './build/') +
+                '&outputFile=bundle.css'
       }
     ]
   }
