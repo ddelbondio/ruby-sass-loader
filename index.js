@@ -44,10 +44,10 @@ module.exports = function(content) {
 		});
 	}
 	
-	var buildPath = query.buildPath ? query.buildPath : os.tmpdir() + '/ruby-sass-loader/';
+	var buildPath = query.buildPath ? query.buildPath : os.tmpdir() + '/ruby-sass-loader';
 
 	var cachePath = buildPath + '/sass-cache/';
-	var outputPath = buildPath + 'out.css';
+	var outputPath = query.outputFile ? buildPath + '/' + query.outputFile : buildPath + '/out.css';
 	var outputMapPath = outputPath + '.map';
 
 	args = args.concat(['--cache-location=' + cachePath, this.resource, outputPath]);
