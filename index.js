@@ -48,7 +48,7 @@ module.exports = function(content) {
 	var buildPath = query.buildPath ? query.buildPath : path.normalize(os.tmpdir() + '/ruby-sass-loader/');
 
 	var cachePath = path.normalize(buildPath + '/sass-cache/');
-	var outputPath = query.outputFile ?  path.normalize(buildPath + '/' + query.outputFile) : buildPath + (Math.random(0, 1000) + path.basename(this.resource)) ;
+	var outputPath = query.outputFile ?  path.normalize(buildPath + '/' + query.outputFile) : buildPath + (Math.random(0, 1000) + path.parse(this.resource).name) + '.css' ;
 	var outputMapPath = outputPath + '.map';
 
 	args = args.concat(['--cache-location=' + cachePath, this.resource, outputPath]);
