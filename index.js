@@ -8,6 +8,7 @@ var // imports
 	child_process = require('child_process')
 	fs = require('fs'),
 	os = require('os'),
+	path = require('path'),
 	async = require("async"),
 	loaderUtils = require("loader-utils")
 ;
@@ -44,14 +45,15 @@ module.exports = function(content) {
 		});
 	}
 	
-	var buildPath = query.buildPath ? query.buildPath : os.tmpdir() + '/ruby-sass-loader';
+	var buildPath = query.buildPath ? query.buildPath : path.normalize(os.tmpdir() + '/ruby-sass-loader/');
 
-	var cachePath = buildPath + '/sass-cache/';
-	var outputPath = query.outputFile ? buildPath + '/' + query.outputFile : buildPath + '/out.css';
+	var cachePath = path.normalize(buildPath + '/sass-cache/');
+	var outputPath = query.outputFile ?  path.normalize(buildPath + '/' + query.outputFile) : buildPath + (Math.random(0, 1000) + path.basename(this.resource)) ;
 	var outputMapPath = outputPath + '.map';
 
 	args = args.concat(['--cache-location=' + cachePath, this.resource, outputPath]);
-	child_process.execFile('sass', args, {cwd: this.context}, function(err, stdout, stderr) {
+	var sass = process.platform === "win32" ? "sass.bat" : "sass";
+	child_process.execFile(sass, args, {cwd: this.context}, function(err, stdout, stderr) {
 		if(err) {
 			callback(err);
 		} else {
