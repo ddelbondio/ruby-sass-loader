@@ -22,9 +22,6 @@ module.exports = function(content) {
 		return content;
 	}
 	var callback = this.async();
-	var resolve = this.resolve;
-	var addDependency = this.addDependency;
-	var emitWarning = this.emitWarning || function() {};
 	var query = loaderUtils.parseQuery(this.query);
 
 	var args = [];
@@ -68,53 +65,9 @@ module.exports = function(content) {
 					if(err) {
 						return callback(err);
 					}
-					processMap(cssData, JSON.parse(mapData), buildPath, callback);
-
+					callback(null, cssData, mapData);
 				});
 			});
 		}
 	}.bind(this));
-
-
-	// taken from https://github.com/webpack/source-map-loader
-	function processMap(content, map, context, callback) {
-		if(!map.sourcesContent || map.sourcesContent.length < map.sources.length) {
-			var sourcePrefix = map.sourceRoot ? map.sourceRoot + "/" : "";
-			map.sources = map.sources.map(function(s) { return sourcePrefix + s; });
-			delete map.sourceRoot;
-			var missingSources = map.sourcesContent ? map.sources.slice(map.sourcesContent.length) : map.sources;
-			async.map(missingSources, function(source, callback) {
-				resolve(context, loaderUtils.urlToRequest(source), function(err, result) {
-					if(err) {
-						emitWarning("Cannot find source file '" + source + "': " + err);
-						return callback(null, null);
-					}
-					addDependency(result);
-					fs.readFile(result, "utf-8", function(err, content) {
-						if(err) {
-							emitWarning("Cannot open source file '" + result + "': " + err);
-							return callback(null, null);
-						}
-						callback(null, {
-							source: result,
-							content: content
-						});
-					});
-				});
-			}, function(err, info) {
-				map.sourcesContent = map.sourcesContent || [];
-				info.forEach(function(res) {
-					if(res) {
-						map.sources[map.sourcesContent.length] = res.source;
-						map.sourcesContent.push(res.content);
-					} else {
-						map.sourcesContent.push(null);
-					}
-				});
-				processMap(content, map, context, callback);
-			});
-			return;
-		}
-		callback(null, content, map);
-	}
 }
