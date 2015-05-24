@@ -5,7 +5,8 @@ under copyright of Tobias Koppers @sokra
 */
 
 var // imports
-	child_process = require('child_process')
+	child_process = require('child_process'),
+	sassGraph = require('sass-graph'),
 	fs = require('fs'),
 	os = require('os'),
 	path = require('path'),
@@ -23,6 +24,10 @@ module.exports = function(content) {
 	}
 	var callback = this.async();
 	var query = loaderUtils.parseQuery(this.query);
+	var self = this;
+	sassGraph.parseFile(this.resource).visitDescendents(this.resource, function(path) {
+		self.addDependency(path);
+	})
 
 	var args = [];
 	if(query.compass) {
@@ -47,7 +52,6 @@ module.exports = function(content) {
 	var cachePath = path.normalize(buildPath + '/sass-cache/');
 	var outputPath = query.outputFile ?  path.normalize(buildPath + '/' + query.outputFile) : buildPath + (Math.random(0, 1000) + path.parse(this.resource).name) + '.css' ;
 	var outputMapPath = outputPath + '.map';
-
 	args = args.concat(['--cache-location=' + cachePath, this.resource, outputPath]);
 	var sass = process.platform === "win32" ? "sass.bat" : "sass";
 	child_process.execFile(sass, args, {cwd: this.context}, function(err, stdout, stderr) {
