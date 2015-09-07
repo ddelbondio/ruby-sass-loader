@@ -18,7 +18,7 @@ module.exports = function(content) {
 	// css-loader will trigger the original loader for @import statements,
 	// so we could possibly be triggered for normal css files which sass can't handle properly
 	// so we just return them
-	if(!this.resource.match(/\.scss$/)) {
+	if(!this.resource.match(/\.s(c|a)ss$/)) {
 		return content;
 	}
 	var callback = this.async();
