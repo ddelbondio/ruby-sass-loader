@@ -1,7 +1,5 @@
 /*
 MIT License http://www.opensource.org/licenses/mit-license.php
-With parts taken from https://github.com/webpack/source-map-loader
-under copyright of Tobias Koppers @sokra
 */
 
 var // imports
@@ -22,9 +20,7 @@ module.exports = function(content) {
 		return content;
 	}
 	var callback = this.async();
-	var resolve = this.resolve;
-	var addDependency = this.addDependency;
-	var emitWarning = this.emitWarning || function() {};
+	var addDependency = this.addDependency.bind(this);
 	var query = loaderUtils.parseQuery(this.query);
 
 	var args = [];
@@ -44,9 +40,13 @@ module.exports = function(content) {
 			args.push('--require=' + require);
 		});
 	}
-	
-	var buildPath = query.buildPath ? query.buildPath : path.normalize(os.tmpdir() + '/ruby-sass-loader/');
 
+	// we always use a sourcemap to determine the dependencies, also
+	// we have to use 'inline' so webpack can always determine the
+	// actual content of the original file for the sourcemap
+	args.push('--sourcemap=inline')
+
+	var buildPath = query.buildPath ? query.buildPath : path.normalize(os.tmpdir() + '/ruby-sass-loader/');
 	var cachePath = path.normalize(buildPath + '/sass-cache/');
 	var outputPath = query.outputFile ?  path.normalize(buildPath + '/' + query.outputFile) : buildPath + (Math.random(0, 1000) + path.parse(this.resource).name) + '.css' ;
 	var outputMapPath = outputPath + '.map';
@@ -68,53 +68,13 @@ module.exports = function(content) {
 					if(err) {
 						return callback(err);
 					}
-					processMap(cssData, JSON.parse(mapData), buildPath, callback);
 
+					// make sure webpack recompiles when an included file changes
+					JSON.parse(mapData).sources.map(addDependency);
+					callback(null, cssData, query.sourceMap ? mapData : null);
 				});
 			});
 		}
 	}.bind(this));
 
-
-	// taken from https://github.com/webpack/source-map-loader
-	function processMap(content, map, context, callback) {
-		if(!map.sourcesContent || map.sourcesContent.length < map.sources.length) {
-			var sourcePrefix = map.sourceRoot ? map.sourceRoot + "/" : "";
-			map.sources = map.sources.map(function(s) { return sourcePrefix + s; });
-			delete map.sourceRoot;
-			var missingSources = map.sourcesContent ? map.sources.slice(map.sourcesContent.length) : map.sources;
-			async.map(missingSources, function(source, callback) {
-				resolve(context, loaderUtils.urlToRequest(source), function(err, result) {
-					if(err) {
-						emitWarning("Cannot find source file '" + source + "': " + err);
-						return callback(null, null);
-					}
-					addDependency(result);
-					fs.readFile(result, "utf-8", function(err, content) {
-						if(err) {
-							emitWarning("Cannot open source file '" + result + "': " + err);
-							return callback(null, null);
-						}
-						callback(null, {
-							source: result,
-							content: content
-						});
-					});
-				});
-			}, function(err, info) {
-				map.sourcesContent = map.sourcesContent || [];
-				info.forEach(function(res) {
-					if(res) {
-						map.sources[map.sourcesContent.length] = res.source;
-						map.sourcesContent.push(res.content);
-					} else {
-						map.sourcesContent.push(null);
-					}
-				});
-				processMap(content, map, context, callback);
-			});
-			return;
-		}
-		callback(null, content, map);
-	}
 }

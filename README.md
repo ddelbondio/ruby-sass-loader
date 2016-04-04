@@ -7,6 +7,9 @@ Use `style!css!ruby-sass` as the loader in your `webpack.config`. If you want to
 
 ### Options
 
+#### sourceMap
+Generate source maps.
+
 #### compass
 Enabled the --compass argument.
 
@@ -34,7 +37,7 @@ module.exports = {
     loaders: [
       {
         test: /\.scss$/,
-        loader: 'style!css?sourceMap!ruby-sass'
+        loader: 'style!css?sourceMap!ruby-sass?sourceMap'
       }
     ]
   }
