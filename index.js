@@ -22,8 +22,12 @@ module.exports = function(content) {
 	var callback = this.async();
 	var addDependency = this.addDependency.bind(this);
 	var query = loaderUtils.parseQuery(this.query);
+	var context = this.context;
 
 	var args = [];
+	if(query.context) {
+		context = query.context;
+	}
 	if(query.compass) {
 		args.push('--compass');
 	}
@@ -53,7 +57,7 @@ module.exports = function(content) {
 
 	args = args.concat(['--cache-location=' + cachePath, this.resource, outputPath]);
 	var sass = process.platform === "win32" ? "sass.bat" : "sass";
-	child_process.execFile(sass, args, {cwd: this.context}, function(err, stdout, stderr) {
+	child_process.execFile(sass, args, {cwd: context}, function(err, stdout, stderr) {
 		if(err) {
 			callback(err);
 		} else {
