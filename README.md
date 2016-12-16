@@ -26,8 +26,10 @@ Controls the --require argument.
 Specify a custom build path. If not given the sass and cache files will be compiled in a temporary directory (os.tmpdir() + '/ruby-sass-loader')
 
 #### outputFile
-Specify a custom output filename. If not specified the sass and cache files will be compiled into 'out.css' and 'out.css.map'
+Specify a custom output filename. If not specified the sass and cache files will be compiled into 'out.css' and 'out.css.map'sass-loader')
 
+#### context
+Specify a custom context, which is a working directory for sass process. By default it is a directory where your entry file is located.
 
 ### Simple example
 
