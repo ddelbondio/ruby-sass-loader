@@ -1,5 +1,6 @@
 # sass loader for [webpack](http://webpack.github.io/)
 
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
 ## Setup
 
@@ -83,3 +84,10 @@ module.exports = {
 ## License
 
 [MIT](http://www.opensource.org/licenses/mit-license.php)
+
+
+[travis-image]: https://travis-ci.org/ddelbondio/ruby-sass-loader.svg?branch=master
+[travis-url]: https://travis-ci.org/ddelbondio/ruby-sass-loader
+
+[coveralls-image]: https://coveralls.io/repos/ddelbondio/ruby-sass-loader/badge.svg?branch=master&service=github
+[coveralls-url]: https://coveralls.io/github/ddelbondio/ruby-sass-loader?branch=master
