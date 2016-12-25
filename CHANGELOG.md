@@ -1,6 +1,7 @@
 0.4.0-dev
 ===
 - support specification of working directory
+- report errors from sass command to webpack
 
 0.3.0
 ===

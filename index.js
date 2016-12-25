@@ -8,6 +8,7 @@ var // imports
 	os = require('os'),
 	path = require('path'),
 	async = require("async"),
+	process = require('process'),
 	loaderUtils = require("loader-utils")
 ;
 
@@ -57,8 +58,14 @@ module.exports = function(content) {
 	var sass = process.platform === "win32" ? "sass.bat" : "sass";
 	child_process.execFile(sass, args, {cwd: cwd}, function(err, stdout, stderr) {
 		if(err) {
+			if(stderr) {
+				this.emitError(stderr);
+			}
 			callback(err);
 		} else {
+			if(stderr) {
+				this.emitWarning(stderr);
+			}
 			fs.readFile(outputPath, 'utf8', function(err, cssData) {
 				if(err) {
 					return callback(err);
