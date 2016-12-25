@@ -47,11 +47,6 @@ describe('loader', function() {
 		runLoaders({
 			loaders: [path.resolve(__dirname, '../index.js?compass&cwd=test/fixtures/compass')],
 			resource: path.resolve(fixtures, 'compass', 'sass-test', 'master.scss'),
-			context: {
-				emitWarning: function(msg) {
-					console.log("WARN: " + msg);
-				}
-			}
 		}, function(err, result) {
 			if(err) return done(err);
 			result.result[0].should.match(/background: url\('\/images-test\/image\.txt\?\d+'\);/);

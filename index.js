@@ -53,18 +53,22 @@ module.exports = function(content) {
 	var cachePath = path.normalize(buildPath + '/sass-cache/');
 	var outputPath = query.outputFile ?  path.normalize(buildPath + '/' + query.outputFile) : buildPath + (Math.random(0, 1000) + path.parse(this.resource).name) + '.css' ;
 	var outputMapPath = outputPath + '.map';
+	// loader-runner doesn't define the error/warning functions, hence we define some simple shims
+	// for test runs
+	var emitError = this.emitError || function(msg) { console.log("ERROR: " + msg); };
+	var emitWarning = this.emitWarning || function(msg) { console.log("WARNING: " + msg); };
 
 	args = args.concat(['--cache-location=' + cachePath, this.resource, outputPath]);
 	var sass = process.platform === "win32" ? "sass.bat" : "sass";
 	child_process.execFile(sass, args, {cwd: cwd}, function(err, stdout, stderr) {
 		if(err) {
 			if(stderr) {
-				this.emitError(stderr);
+				emitError(stderr);
 			}
 			callback(err);
 		} else {
 			if(stderr) {
-				this.emitWarning(stderr);
+				emitWarning(stderr);
 			}
 			fs.readFile(outputPath, 'utf8', function(err, cssData) {
 				if(err) {
