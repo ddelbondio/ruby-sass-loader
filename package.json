@@ -16,15 +16,19 @@
     "url": "git://github.com/ddelbondio/ruby-sass-loader.git"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly"
   },
   "dependencies": {
     "async": "~0.9.0",
     "loader-utils": "~0.2.3"
   },
   "devDependencies": {
+    "coveralls": "^2.11.15",
+    "istanbul": "^0.4.5",
     "loader-runner": "^2.1.1",
     "mocha": "^2.5.3",
+    "mocha-lcov-reporter": "^1.2.0",
     "should": "^9.0.1",
     "webpack": "^1.13.1"
   }

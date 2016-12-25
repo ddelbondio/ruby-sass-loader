@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - "node"
+  - "iojs"
+  - "6"
+  - "5"
+  - "4"
+before_install:
+  - rvm install 2.2
+  - gem install sass compass
+install:
+  - npm install
+script:
+  - npm run coverage
+  - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls --verbose
+sudo: false
