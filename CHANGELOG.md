@@ -1,4 +1,4 @@
-0.4.0-dev
+0.4.0
 ===
 - support specification of working directory
 - report errors from sass command to webpack

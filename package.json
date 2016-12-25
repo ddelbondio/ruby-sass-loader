@@ -8,13 +8,19 @@
     "webpack",
     "loader"
   ],
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Dominik del Bondio",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/ddelbondio/ruby-sass-loader.git"
   },
+  "files": [
+    "CHANGELOG.md",
+    "index.js",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "test": "mocha",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly"
