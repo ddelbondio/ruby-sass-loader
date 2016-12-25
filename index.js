@@ -71,6 +71,7 @@ module.exports = function(content) {
 				emitWarning(stderr);
 			}
 			fs.readFile(outputPath, 'utf8', function(err, cssData) {
+				/* istanbul ignore if */
 				if(err) {
 					return callback(err);
 				}
@@ -78,6 +79,7 @@ module.exports = function(content) {
 				cssData = cssData.replace(/\/\*#\s*sourceMappingURL=.*\.css\.map\s*\*\//, '');
 
 				fs.readFile(outputMapPath, 'utf8', function(err, mapData) {
+					/* istanbul ignore if */
 					if(err) {
 						return callback(err);
 					}
