@@ -28,6 +28,9 @@ Specify a custom build path. If not given the sass and cache files will be compi
 #### outputFile
 Specify a custom output filename. If not specified the sass and cache files will be compiled into 'out.css' and 'out.css.map'
 
+#### cwd
+Specify a working directory. Defaults to the directory of the sass file.
+
 
 ### Simple example
 

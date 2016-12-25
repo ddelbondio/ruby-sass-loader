@@ -41,6 +41,8 @@ module.exports = function(content) {
 		});
 	}
 
+	var cwd = query.cwd ? path.resolve(process.cwd(), query.cwd) : this.context;
+
 	// we always use a sourcemap to determine the dependencies, also
 	// we have to use 'inline' so webpack can always determine the
 	// actual content of the original file for the sourcemap
@@ -53,7 +55,7 @@ module.exports = function(content) {
 
 	args = args.concat(['--cache-location=' + cachePath, this.resource, outputPath]);
 	var sass = process.platform === "win32" ? "sass.bat" : "sass";
-	child_process.execFile(sass, args, {cwd: this.context}, function(err, stdout, stderr) {
+	child_process.execFile(sass, args, {cwd: cwd}, function(err, stdout, stderr) {
 		if(err) {
 			callback(err);
 		} else {
